@@ -2,16 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Experimental.Rendering.Universal;
  
 using TMPro; // using text mesh for the clock display
  
-using UnityEngine.Rendering; // used to access the volume component
- 
-public class DayNightScript : MonoBehaviour
+public class DayNightScript2 : MonoBehaviour
 {
     public TextMeshProUGUI timeDisplay; // Display Time
     public TextMeshProUGUI dayDisplay; // Display Day
-    public Volume ppv; // this is the post processing volume
  
     public float tick; // Increasing the tick, increases second rate
     public float seconds; 
@@ -22,17 +20,25 @@ public class DayNightScript : MonoBehaviour
     public bool activateLights; // checks if lights are on
     public GameObject[] lights; // all the lights we want on when its dark
     public SpriteRenderer[] stars; // star sprites 
+
+    private Light2D globalLight;
+
+    private float intensity = 1.0f;
+
     // Start is called before the first frame update
     void Start()
     {
-        ppv = gameObject.GetComponent<Volume>();
+        globalLight = gameObject.GetComponent<Light2D>();
+
         if(hours>=22 || hours<6) // dusk at 21:00 / 9pm    -   until 22:00 / 10pm
         {
-            ppv.weight = 1;
+            globalLight.intensity = 0.2f;
+            intensity = 0.2f;
         }
         else if(hours>=7 || hours<21) // Dawn at 6:00 / 6am    -   until 7:00 / 7am
         {
-            ppv.weight = 0;
+            globalLight.intensity = 1.0f;
+            intensity = 1.0f;
         }
     }
  
@@ -73,7 +79,16 @@ public class DayNightScript : MonoBehaviour
         //ppv.weight = 0;
         if(hours>=21 && hours<22) // dusk at 21:00 / 9pm    -   until 22:00 / 10pm
         {
-            ppv.weight =  (float)mins / 60; // since dusk is 1 hr, we just divide the mins by 60 which will slowly increase from 0 - 1 
+            //globalLight.intensity =  (float)mins / 60; // since dusk is 1 hr, we just divide the mins by 60 which will slowly increase from 0 - 1 
+            intensity = 1 - (float)mins / 60;
+
+            if(intensity < 0.2f) 
+            {
+                intensity = 0.2f;
+            } 
+
+            globalLight.intensity = intensity;
+        
             for (int i = 0; i < stars.Length; i++)
             {
                 stars[i].color = new Color(stars[i].color.r, stars[i].color.g, stars[i].color.b, (float)mins / 60); // change the alpha value of the stars so they become visible
@@ -95,7 +110,15 @@ public class DayNightScript : MonoBehaviour
  
         if(hours>=6 && hours<7) // Dawn at 6:00 / 6am    -   until 7:00 / 7am
         {
-            ppv.weight = 1 - (float)mins / 60; // we minus 1 because we want it to go from 1 - 0
+            //globalLight.intensity = 1 - (float)mins / 60; // we minus 1 because we want it to go from 1 - 0
+            intensity =  (float)mins / 60;
+
+            if(intensity < 0.2f) 
+            {
+                intensity = 0.2f;
+            } 
+
+            globalLight.intensity = intensity;
             for (int i = 0; i < stars.Length; i++)
             {
                 stars[i].color = new Color(stars[i].color.r, stars[i].color.g, stars[i].color.b, 1 -(float)mins / 60); // make stars invisible

@@ -12,7 +12,16 @@ public class PlayerMovement : MonoBehaviour
     
     public Vector2 boxSize = new Vector2(0.5f, 1f);
 
+    private UIManager uIManager;
+
+    private bool gameIsPaused = false;
+
     Vector2 movement;
+
+    void Start()
+    {
+        uIManager = Object.FindObjectOfType<UIManager>();
+    }
 
     void OnDrawGizmosSelected()
     {
@@ -49,6 +58,11 @@ public class PlayerMovement : MonoBehaviour
     public void OnInteract() 
     {
         CheckInteraction();
+    }
+
+    public void OnPause() 
+    {
+        uIManager.PauseGame();
     }
 
     private void FixedUpdate()
