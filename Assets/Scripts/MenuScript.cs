@@ -17,7 +17,7 @@ public class MenuScript : MonoBehaviour
 
         if (music)
         {
-            //music.playMainMenuMusic();
+            music.playMainMenuMusic();
         }
     }
 

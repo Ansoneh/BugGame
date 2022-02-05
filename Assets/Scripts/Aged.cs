@@ -1,13 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopKeeper : Interactable
+public class Aged : MonoBehaviour
 {
-    public override void Interact()
-    {
-        // Open buy/sell/talk box here
-        throw new System.NotImplementedException();
-    }
-
+    public int age;
     // Start is called before the first frame update
     void Start()
     {

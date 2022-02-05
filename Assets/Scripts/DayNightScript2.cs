@@ -16,6 +16,9 @@ public class DayNightScript2 : MonoBehaviour
     public int mins;
     public int hours;
     public int days = 1;
+    public int years = 1;
+    public int daysPerYear = 5;
+    public int yearMultiplier = 1;
  
     public bool activateLights; // checks if lights are on
     public GameObject[] lights; // all the lights we want on when its dark
@@ -71,6 +74,13 @@ public class DayNightScript2 : MonoBehaviour
             hours = 0;
             days += 1;
         }
+
+        if(years >= daysPerYear)
+        {
+            days = 0;
+            years += (1 * yearMultiplier);
+        }
+
         ControlPPV(); // changes post processing volume after calculation
     }
  
